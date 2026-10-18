@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "id": "signalrgb",
+  "version": "0.1.0",
+  "contractVersion": "0.1",
+  "entryPoint": "FocusRgb.Plugin.SignalRgb.dll",
+  "operatingSystems": ["windows"],
+  "architectures": ["x64", "arm64"],
+  "roles": ["integration", "output", "effect"],
+  "resources": ["process.read", "filesystem.read", "process.start"],
+  "license": "MIT",
+  "source": "https://github.com/MAJ224/FocusRGB-Plugin-SignalRGB"
+}

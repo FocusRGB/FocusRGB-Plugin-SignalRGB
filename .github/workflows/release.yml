@@ -1,0 +1,35 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+  packages: read
+
+jobs:
+  release:
+    runs-on: windows-latest
+    env:
+      DOTNET_NOLOGO: true
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+      NuGetPackageSourceCredentials_github: Username=${{ github.actor }};Password=${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+      - run: dotnet restore FocusRGB-Plugin-SignalRGB.slnx
+      - run: dotnet test --solution FocusRGB-Plugin-SignalRGB.slnx -c Release
+      - name: Assemble package
+        shell: pwsh
+        run: |
+          dotnet publish src/FocusRgb.Plugin.SignalRgb/FocusRgb.Plugin.SignalRgb.csproj -c Release --no-restore --no-self-contained -o build/package/signalrgb
+          Copy-Item src/FocusRgb.Plugin.SignalRgb/focusrgb-plugin.json build/package/signalrgb/
+          Copy-Item LICENSE build/package/signalrgb/
+          Compress-Archive build/package/signalrgb/* build/FocusRGB-Plugin-SignalRGB-${{ github.ref_name }}.zip
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: build/FocusRGB-Plugin-SignalRGB-${{ github.ref_name }}.zip
+          generate_release_notes: true

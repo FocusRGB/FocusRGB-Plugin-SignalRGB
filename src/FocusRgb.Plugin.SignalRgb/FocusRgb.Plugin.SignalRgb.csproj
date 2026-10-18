@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>FocusRgb.Plugin.SignalRgb</AssemblyName>
+    <RootNamespace>FocusRgb.Plugin.SignalRgb</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="FocusRgb.PluginSdk" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="FocusRgb.Plugin.SignalRgb.Tests" />
+  </ItemGroup>
+</Project>
