@@ -46,4 +46,13 @@ The manifest declares the resources used by the plugin:
 Provider research and developer utilities moved from the main repository are retained under
 [`research/`](research/) for evidence and reproduction. They are not part of the release package.
 
+## Local code graph
+
+The code graph is at `graphify-out/` and is ignored; local git hooks refresh it automatically.
+Before broad searches, orient with `graphify query "<question>"`, `graphify explain "<symbol>"`,
+or `graphify path "A" "B"`, keeping `--budget` small on each command. Confirm findings in the
+actual source because the graph can lag. If it is stale or missing, run `graphify update .`
+(no LLM). Never run `graphify extract` or semantic/deep modes unless the owner asks: they call
+an LLM. Never commit `graphify-out/`.
+
 Assisted-by: OpenAI Codex
