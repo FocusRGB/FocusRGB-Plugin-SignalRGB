@@ -1,7 +1,7 @@
 # FocusRGB SignalRGB plugin
 
 This repository contains the optional SignalRGB output plugin for
-[FocusRGB](https://github.com/MAJ224/FocusRGB). It is independently buildable and consumes the
+[FocusRGB](https://github.com/FocusRGB/FocusRGB). It is independently buildable and consumes the
 published `FocusRgb.PluginSdk` package; it is not a submodule and has no source dependency on the
 FocusRGB checkout.
 
@@ -21,6 +21,8 @@ layout command and preserves SignalRGB's current placements.
 
 GitHub Packages requires authentication even for public NuGet packages. Set the standard NuGet
 source credential environment variable before restoring locally:
+
+<!-- TODO(FocusRGB/FocusRGB#79): remove the MAJ224 feed credentials after the SDK moves to nuget.org. -->
 
 ```powershell
 $env:NuGetPackageSourceCredentials_github = 'Username=MAJ224;Password=<GitHub token>'
