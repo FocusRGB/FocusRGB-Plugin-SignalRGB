@@ -9,5 +9,5 @@
   "roles": ["integration", "output", "effect"],
   "resources": ["process.read", "filesystem.read", "process.start"],
   "license": "MIT",
-  "source": "https://github.com/MAJ224/FocusRGB-Plugin-SignalRGB"
+  "source": "https://github.com/FocusRGB/FocusRGB-Plugin-SignalRGB"
 }
