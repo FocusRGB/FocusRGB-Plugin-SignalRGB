@@ -22,7 +22,7 @@ layout command and preserves SignalRGB's current placements.
 GitHub Packages requires authentication even for public NuGet packages. Set the standard NuGet
 source credential environment variable before restoring locally:
 
-<!-- TODO(#79): remove the MAJ224 feed credentials after the SDK moves to nuget.org. -->
+<!-- TODO(FocusRGB/FocusRGB#79): remove the MAJ224 feed credentials after the SDK moves to nuget.org. -->
 
 ```powershell
 $env:NuGetPackageSourceCredentials_github = 'Username=MAJ224;Password=<GitHub token>'
