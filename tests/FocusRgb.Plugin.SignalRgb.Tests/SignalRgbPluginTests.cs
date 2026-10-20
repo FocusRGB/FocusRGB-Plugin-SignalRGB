@@ -10,6 +10,7 @@ namespace FocusRgb.Plugin.SignalRgb.Tests
             var result = await Plugin().InitializeAsync(Initialize(), TestContext.Current.CancellationToken);
 
             Assert.Equal("signalrgb", result.PluginId);
+            Assert.Equal(ContractVersion.Current, result.ContractVersion);
             Assert.Equal("unverified", result.Capabilities.Single(item => item.Id == "provider.effect.select").Support);
             Assert.Equal("unsupported", result.Capabilities.Single(item => item.Id == "provider.layout.select").Support);
         }
@@ -147,7 +148,7 @@ namespace FocusRgb.Plugin.SignalRgb.Tests
 
         private static InitializeParameters Initialize() => new()
         {
-            ContractVersion = "0.1",
+            ContractVersion = ContractVersion.Current,
             Host = new PluginHostInfo { Name = "tests", Version = "1.0.0" }
         };
 

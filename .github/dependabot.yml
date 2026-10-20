@@ -12,9 +12,6 @@ updates:
     groups:
       nuget-minor-and-patch:
         update-types: [minor, patch]
-    ignore:
-      # Moves to nuget.org 1.0 by hand (FocusRGB#84); the legacy feed needs credentials Dependabot doesn't have.
-      - dependency-name: FocusRgb.PluginSdk
   - package-ecosystem: github-actions
     directory: /
     target-branch: develop
