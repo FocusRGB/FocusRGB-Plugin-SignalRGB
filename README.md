@@ -1,5 +1,7 @@
 # FocusRGB SignalRGB plugin
 
+<img src="assets/logo-128.png" alt="FocusRGB logo" width="128">
+
 This repository contains the optional SignalRGB output plugin for
 [FocusRGB](https://github.com/FocusRGB/FocusRGB). It is independently buildable and consumes the
 published `FocusRgb.PluginSdk` package; it is not a submodule and has no source dependency on the
