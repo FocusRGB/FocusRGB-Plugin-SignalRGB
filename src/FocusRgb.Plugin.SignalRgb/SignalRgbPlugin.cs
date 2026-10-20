@@ -20,7 +20,7 @@ namespace FocusRgb.Plugin.SignalRgb
             {
                 PluginId = "signalrgb",
                 PluginVersion = "0.1.0",
-                ContractVersion = "0.1",
+                ContractVersion = ContractVersion.Current,
                 Capabilities =
                 [
                     Capability("provider.effect.catalog", "supported"),
