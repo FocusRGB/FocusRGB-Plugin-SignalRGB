@@ -4,6 +4,11 @@ on:
   push:
     tags: ['v*']
   workflow_dispatch:
+  pull_request:
+    paths:
+      - .github/workflows/release.yml
+      - src/FocusRgb.Plugin.SignalRgb/**
+      - LICENSE
 
 permissions:
   contents: write
@@ -28,15 +33,32 @@ jobs:
           dotnet publish src/FocusRgb.Plugin.SignalRgb/FocusRgb.Plugin.SignalRgb.csproj -c Release --no-restore --no-self-contained -o build/package/signalrgb
           Copy-Item src/FocusRgb.Plugin.SignalRgb/focusrgb-plugin.json build/package/signalrgb/
           Copy-Item LICENSE build/package/signalrgb/
-          Compress-Archive build/package/signalrgb/* build/FocusRGB-Plugin-SignalRGB-${{ env.PACKAGE_SUFFIX }}.zip
-      - name: Upload dry-run package
-        if: github.event_name == 'workflow_dispatch'
+          $zip = "build/FocusRGB-Plugin-SignalRGB-${{ env.PACKAGE_SUFFIX }}.zip"
+          $manifest = "build/focusrgb-plugin.json"
+          Compress-Archive build/package/signalrgb/* $zip
+          Copy-Item src/FocusRgb.Plugin.SignalRgb/focusrgb-plugin.json $manifest
+          @($zip, $manifest) | ForEach-Object {
+            $hash = (Get-FileHash $_ -Algorithm SHA256).Hash.ToLowerInvariant()
+            "$hash  $(Split-Path $_ -Leaf)"
+          } | Set-Content build/SHA256SUMS -Encoding utf8NoBOM
+          if ((Get-Content build/SHA256SUMS).Count -ne 2) {
+            throw "SHA256SUMS must contain the package and manifest hashes."
+          }
+      - name: Upload dry-run release assets
+        if: github.event_name != 'push'
         uses: actions/upload-artifact@v7
         with:
           name: FocusRGB-Plugin-SignalRGB-${{ env.PACKAGE_SUFFIX }}
-          path: build/FocusRGB-Plugin-SignalRGB-${{ env.PACKAGE_SUFFIX }}.zip
+          path: |
+            build/FocusRGB-Plugin-SignalRGB-${{ env.PACKAGE_SUFFIX }}.zip
+            build/focusrgb-plugin.json
+            build/SHA256SUMS
+          if-no-files-found: error
       - uses: softprops/action-gh-release@v2
         if: github.event_name == 'push'
         with:
-          files: build/FocusRGB-Plugin-SignalRGB-${{ env.PACKAGE_SUFFIX }}.zip
+          files: |
+            build/FocusRGB-Plugin-SignalRGB-${{ env.PACKAGE_SUFFIX }}.zip
+            build/focusrgb-plugin.json
+            build/SHA256SUMS
           generate_release_notes: true
