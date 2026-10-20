@@ -10,4 +10,9 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\FocusRgb.Plugin.SignalRgb\FocusRgb.Plugin.SignalRgb.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\src\FocusRgb.Plugin.SignalRgb\focusrgb-plugin.json"
+          Link="focusrgb-plugin.json"
+          CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
 </Project>
