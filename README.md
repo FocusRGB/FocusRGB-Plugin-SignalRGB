@@ -41,6 +41,13 @@ The manifest declares the resources used by the plugin:
 Provider research and developer utilities moved from the main repository are retained under
 [`research/`](research/) for evidence and reproduction. They are not part of the release package.
 
+## Releases and discovery
+
+The repository uses the `focusrgb-plugin` GitHub topic so FocusRGB can discover it as an official
+plugin. Each stable release publishes the installable zip, a standalone `focusrgb-plugin.json`
+for listing metadata, and `SHA256SUMS` covering both files. Pull requests that change packaging
+run the same assembly path and upload those three files as a dry-run artifact.
+
 Repository agents should read [`AGENTS.md`](AGENTS.md) before making changes.
 
 Assisted-by: OpenAI Codex
