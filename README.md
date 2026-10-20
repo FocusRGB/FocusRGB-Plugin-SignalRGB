@@ -21,20 +21,13 @@ layout command and preserves SignalRGB's current placements.
 
 ## Build and test
 
-GitHub Packages requires authentication even for public NuGet packages. Set the standard NuGet
-source credential environment variable before restoring locally:
-
-<!-- TODO(FocusRGB/FocusRGB#79): remove the MAJ224 feed credentials after the SDK moves to nuget.org. -->
+`FocusRgb.PluginSdk` restores from nuget.org without repository credentials:
 
 ```powershell
-$env:NuGetPackageSourceCredentials_github = 'Username=MAJ224;Password=<GitHub token>'
 dotnet restore FocusRGB-Plugin-SignalRGB.slnx
 dotnet build FocusRGB-Plugin-SignalRGB.slnx -c Release --no-restore
 dotnet test --solution FocusRGB-Plugin-SignalRGB.slnx -c Release --no-build
 ```
-
-The token needs `read:packages`. CI receives narrowly scoped package access through its repository
-`GITHUB_TOKEN`.
 
 ## Package permissions
 
