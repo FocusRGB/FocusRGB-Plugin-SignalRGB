@@ -4,9 +4,6 @@ Follow the repository workflow, attribution rules, conventions, and slice docume
 the peer `FocusRGB/FocusRGB` repository. Those instructions take precedence over assistant
 skills when they conflict.
 
-The code graph is at `graphify-out/` and is ignored; local git hooks refresh it automatically.
-Before broad searches, orient with `graphify query "<question>"`, `graphify explain "<symbol>"`,
-or `graphify path "A" "B"`, keeping `--budget` small on each command. Confirm findings in the
-actual source because the graph can lag. If it is stale or missing, run `graphify update .`
-(no LLM). Never run `graphify extract` or semantic/deep modes unless the owner asks: they call
-an LLM. Never commit `graphify-out/`.
+The code graph is workspace-wide at `../build/graphify-out/` (see the workspace `AGENTS.md`).
+Query from the workspace folder or pass `--graph ../build/graphify-out/graph.json`. Never run
+`graphify hook install` in this repo; never commit graph output.
