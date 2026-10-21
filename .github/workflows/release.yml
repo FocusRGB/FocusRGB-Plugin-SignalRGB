@@ -11,7 +11,7 @@ on:
       - LICENSE
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   release:
@@ -44,8 +44,7 @@ jobs:
           if ((Get-Content build/SHA256SUMS).Count -ne 2) {
             throw "SHA256SUMS must contain the package and manifest hashes."
           }
-      - name: Upload dry-run release assets
-        if: github.event_name != 'push'
+      - name: Upload release assets
         uses: actions/upload-artifact@v7
         with:
           name: FocusRGB-Plugin-SignalRGB-${{ env.PACKAGE_SUFFIX }}
@@ -54,11 +53,22 @@ jobs:
             build/focusrgb-plugin.json
             build/SHA256SUMS
           if-no-files-found: error
+
+  publish:
+    if: github.event_name == 'push'
+    needs: release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: FocusRGB-Plugin-SignalRGB-${{ github.ref_name }}
+          path: build
       - uses: softprops/action-gh-release@v2
-        if: github.event_name == 'push'
         with:
           files: |
-            build/FocusRGB-Plugin-SignalRGB-${{ env.PACKAGE_SUFFIX }}.zip
+            build/FocusRGB-Plugin-SignalRGB-${{ github.ref_name }}.zip
             build/focusrgb-plugin.json
             build/SHA256SUMS
           generate_release_notes: true
