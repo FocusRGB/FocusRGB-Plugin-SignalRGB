@@ -65,7 +65,7 @@ jobs:
         with:
           name: FocusRGB-Plugin-SignalRGB-${{ github.ref_name }}
           path: build
-      - uses: softprops/action-gh-release@v2
+      - uses: softprops/action-gh-release@v3
         with:
           files: |
             build/FocusRGB-Plugin-SignalRGB-${{ github.ref_name }}.zip
