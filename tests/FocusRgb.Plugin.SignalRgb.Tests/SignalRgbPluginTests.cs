@@ -1,3 +1,4 @@
+using System.Text.Json;
 using FocusRgb.Contracts;
 
 namespace FocusRgb.Plugin.SignalRgb.Tests
@@ -5,11 +6,14 @@ namespace FocusRgb.Plugin.SignalRgb.Tests
     public sealed class SignalRgbPluginTests
     {
         [Fact]
-        public async Task Initialize_ReportsVerifiedCapabilityLimits()
+        public async Task Initialize_ReportsManifestVersionAndVerifiedCapabilityLimits()
         {
             var result = await Plugin().InitializeAsync(Initialize(), TestContext.Current.CancellationToken);
+            using var manifest = JsonDocument.Parse(
+                File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "focusrgb-plugin.json")));
 
             Assert.Equal("signalrgb", result.PluginId);
+            Assert.Equal(manifest.RootElement.GetProperty("version").GetString(), result.PluginVersion);
             Assert.Equal(ContractVersion.Current, result.ContractVersion);
             Assert.Equal("unverified", result.Capabilities.Single(item => item.Id == "provider.effect.select").Support);
             Assert.Equal("unsupported", result.Capabilities.Single(item => item.Id == "provider.layout.select").Support);

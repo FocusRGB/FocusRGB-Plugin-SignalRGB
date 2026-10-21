@@ -7,7 +7,7 @@ This repository contains the optional SignalRGB output plugin for
 published `FocusRgb.PluginSdk` package; it is not a submodule and has no source dependency on the
 FocusRGB checkout.
 
-Version 0.1 provides:
+Version 1.0 provides:
 
 - SignalRGB process and launcher discovery without pinning an installed version;
 - a degraded, read-only catalog of installed bundled and downloaded effects;

@@ -19,7 +19,7 @@ namespace FocusRgb.Plugin.SignalRgb
             return Task.FromResult(new InitializeResult
             {
                 PluginId = "signalrgb",
-                PluginVersion = "0.1.0",
+                PluginVersion = typeof(SignalRgbPlugin).Assembly.GetName().Version!.ToString(3),
                 ContractVersion = ContractVersion.Current,
                 Capabilities =
                 [
