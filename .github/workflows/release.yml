@@ -37,10 +37,16 @@ jobs:
           $manifest = "build/focusrgb-plugin.json"
           Compress-Archive build/package/signalrgb/* $zip
           Copy-Item src/FocusRgb.Plugin.SignalRgb/focusrgb-plugin.json $manifest
-          @($zip, $manifest) | ForEach-Object {
+          $checksumLines = @($zip, $manifest) | ForEach-Object {
             $hash = (Get-FileHash $_ -Algorithm SHA256).Hash.ToLowerInvariant()
             "$hash  $(Split-Path $_ -Leaf)"
-          } | Set-Content build/SHA256SUMS -Encoding utf8NoBOM
+          }
+          $checksumPath = Join-Path $PWD build/SHA256SUMS
+          [IO.File]::WriteAllText(
+            $checksumPath, ($checksumLines -join "`n") + "`n", [Text.UTF8Encoding]::new($false))
+          if ([IO.File]::ReadAllText($checksumPath).Contains("`r")) {
+            throw "SHA256SUMS must use LF line endings."
+          }
           if ((Get-Content build/SHA256SUMS).Count -ne 2) {
             throw "SHA256SUMS must contain the package and manifest hashes."
           }
