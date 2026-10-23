@@ -48,6 +48,5 @@ plugin. Each stable release publishes the installable zip, a standalone `focusrg
 for listing metadata, and `SHA256SUMS` covering both files. Pull requests that change packaging
 run the same assembly path and upload those three files as a dry-run artifact.
 
-Repository agents should read [`AGENTS.md`](AGENTS.md) before making changes.
 
 Assisted-by: OpenAI Codex
