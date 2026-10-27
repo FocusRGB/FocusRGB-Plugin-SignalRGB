@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "signalrgb",
   "version": "1.0.0",
-  "contractVersion": "1.0",
+  "contractVersion": "1.2",
   "entryPoint": "FocusRgb.Plugin.SignalRgb.dll",
   "operatingSystems": ["windows"],
   "architectures": ["x64", "arm64"],
