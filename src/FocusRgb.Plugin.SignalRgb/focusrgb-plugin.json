@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "signalrgb",
-  "version": "1.0.0",
+  "version": "0.2.0",
   "contractVersion": "1.2",
   "entryPoint": "FocusRgb.Plugin.SignalRgb.dll",
   "operatingSystems": ["windows"],
