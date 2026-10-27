@@ -1,0 +1,102 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - .github/workflows/release.yml
+      - src/FocusRgb.Plugin.SignalRgb/**
+      - LICENSE
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    runs-on: windows-latest
+    env:
+      DOTNET_NOLOGO: true
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+      PACKAGE_SUFFIX: ${{ github.event_name == 'push' && github.ref_name || format('dry-run-{0}', github.run_number) }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Validate release tag
+        if: github.event_name == 'push'
+        shell: pwsh
+        env:
+          RELEASE_REF: ${{ github.ref_name }}
+        run: |
+          if ($env:RELEASE_REF -notmatch '^v([0-9]+\.[0-9]+\.[0-9]+)$') {
+            throw "Release tags must use vMAJOR.MINOR.PATCH."
+          }
+          $tagVersion = $Matches[1]
+          $manifest = Get-Content src/FocusRgb.Plugin.SignalRgb/focusrgb-plugin.json -Raw | ConvertFrom-Json
+          if ($manifest.version -ne $tagVersion) {
+            throw "Plugin manifest version must equal tag version $tagVersion."
+          }
+          git fetch origin --no-tags "+refs/heads/main:refs/remotes/origin/main"
+          if ($LASTEXITCODE -ne 0) { throw "Could not refresh main history." }
+          git merge-base --is-ancestor $env:GITHUB_SHA origin/main
+          if ($LASTEXITCODE -ne 0) { throw "Release commits must belong to main history." }
+          exit 0
+      - uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+      - run: dotnet restore FocusRGB-Plugin-SignalRGB.slnx
+      - run: dotnet test --solution FocusRGB-Plugin-SignalRGB.slnx -c Release
+      - name: Assemble package
+        shell: pwsh
+        run: |
+          dotnet publish src/FocusRgb.Plugin.SignalRgb/FocusRgb.Plugin.SignalRgb.csproj -c Release --no-restore --no-self-contained -o build/package/signalrgb
+          Copy-Item src/FocusRgb.Plugin.SignalRgb/focusrgb-plugin.json build/package/signalrgb/
+          Copy-Item LICENSE build/package/signalrgb/
+          $zip = "build/FocusRGB-Plugin-SignalRGB-${{ env.PACKAGE_SUFFIX }}.zip"
+          $manifest = "build/focusrgb-plugin.json"
+          Compress-Archive build/package/signalrgb/* $zip
+          Copy-Item src/FocusRgb.Plugin.SignalRgb/focusrgb-plugin.json $manifest
+          $checksumLines = @($zip, $manifest) | ForEach-Object {
+            $hash = (Get-FileHash $_ -Algorithm SHA256).Hash.ToLowerInvariant()
+            "$hash  $(Split-Path $_ -Leaf)"
+          }
+          $checksumPath = Join-Path $PWD build/SHA256SUMS
+          [IO.File]::WriteAllText(
+            $checksumPath, ($checksumLines -join "`n") + "`n", [Text.UTF8Encoding]::new($false))
+          if ([IO.File]::ReadAllText($checksumPath).Contains("`r")) {
+            throw "SHA256SUMS must use LF line endings."
+          }
+          if ((Get-Content build/SHA256SUMS).Count -ne 2) {
+            throw "SHA256SUMS must contain the package and manifest hashes."
+          }
+      - name: Upload release assets
+        uses: actions/upload-artifact@v7
+        with:
+          name: FocusRGB-Plugin-SignalRGB-${{ env.PACKAGE_SUFFIX }}
+          path: |
+            build/FocusRGB-Plugin-SignalRGB-${{ env.PACKAGE_SUFFIX }}.zip
+            build/focusrgb-plugin.json
+            build/SHA256SUMS
+          if-no-files-found: error
+
+  publish:
+    if: github.event_name == 'push'
+    needs: release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: FocusRGB-Plugin-SignalRGB-${{ github.ref_name }}
+          path: build
+      - uses: softprops/action-gh-release@v3
+        with:
+          files: |
+            build/FocusRGB-Plugin-SignalRGB-${{ github.ref_name }}.zip
+            build/focusrgb-plugin.json
+            build/SHA256SUMS
+          generate_release_notes: true
+          prerelease: true

@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="xunit.v3" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\FocusRgb.Plugin.SignalRgb\FocusRgb.Plugin.SignalRgb.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\src\FocusRgb.Plugin.SignalRgb\focusrgb-plugin.json"
+          Link="focusrgb-plugin.json"
+          CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>
