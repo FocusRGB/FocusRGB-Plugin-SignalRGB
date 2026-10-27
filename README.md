@@ -1,5 +1,7 @@
 # FocusRGB SignalRGB plugin
 
+> See the [SignalRGB plugin guide](https://github.com/FocusRGB/FocusRGB/wiki/SignalRGB-plugin) for setup, requirements, and output status.
+
 <img src="assets/logo-128.png" alt="FocusRGB logo" width="128">
 
 This repository contains the optional SignalRGB output plugin for
